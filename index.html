@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Comparison: Charlie and the Chocolate Factory vs. The Giver</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Contrast -->
+    <!-- Application Structure Plan: The SPA is designed as a top-to-bottom narrative scroll, guiding the user through a comparative analysis. It starts with a broad introduction (Protagonists & Worlds), moves to a detailed thematic breakdown using interactive charts (Themes & Tone), and concludes with the narrative structure (Plot Progression). This thematic, storytelling-based structure was chosen over a simple table to make the literary comparison more engaging and easier to digest for a general audience, turning static facts into a dynamic exploration. -->
+    <!-- Visualization & Content Choices: 
+        - Introduction: Goal: Inform -> Method: Styled HTML cards -> Justification: Cleanly introduces the two subjects.
+        - Worlds Comparison: Goal: Compare -> Method: Side-by-side HTML layout -> Justification: Provides direct, easy-to-scan contrast of settings.
+        - Key Themes: Goal: Compare -> Method: Radar Chart (Chart.js/Canvas) -> Justification: Visually represents the multi-faceted thematic profiles of each book, creating a unique "shape" for each that is instantly comparable.
+        - Tone: Goal: Compare -> Method: Diverging Bar Chart (Chart.js/Canvas) -> Justification: Effectively places the books on a qualitative spectrum (Serious vs. Whimsical), making the abstract concept of tone tangible.
+        - Narrative Arc: Goal: Organize/Compare -> Method: Styled HTML/CSS Flow Diagram -> Justification: Clearly visualizes the plot progression (Conflict -> Climax -> Resolution) for both stories in a parallel format.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f7f4;
+            color: #333333;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 450px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 450px;
+            }
+        }
+        .flow-arrow {
+            font-size: 2rem;
+            line-height: 1;
+            font-weight: bold;
+            color: #a0aec0;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-6xl">
+
+        <header class="text-center my-12 md:my-16">
+            <h1 class="text-4xl md:text-6xl font-black tracking-tight text-gray-800">Two Worlds, Two Journeys</h1>
+            <p class="text-lg md:text-xl text-gray-500 mt-2">An Interactive Comparison of Two Literary Classics</p>
+        </header>
+
+        <main class="space-y-16 md:space-y-24">
+
+            <section id="introduction">
+                <div class="text-center max-w-3xl mx-auto">
+                     <h2 class="text-3xl font-bold text-gray-800">Meet the Protagonists</h2>
+                     <p class="mt-2 text-gray-600">This section introduces the two central figures and the authors who created their worlds. Though both are young boys on the cusp of a life-changing experience, their journeys could not be more different.</p>
+                </div>
+                <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-200 text-center">
+                        <h3 class="text-2xl font-bold text-[#D9534F]">Charlie and the Chocolate Factory</h3>
+                        <p class="text-md text-gray-500 mt-1">by Roald Dahl</p>
+                        <div class="text-6xl my-4">🍫</div>
+                        <p class="font-semibold text-xl text-gray-700">Charlie Bucket</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-200 text-center">
+                        <h3 class="text-2xl font-bold text-[#5BC0DE]">The Giver</h3>
+                        <p class="text-md text-gray-500 mt-1">by Lois Lowry</p>
+                        <div class="text-6xl my-4">👁️</div>
+                        <p class="font-semibold text-xl text-gray-700">Jonas</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="worlds">
+                <div class="text-center max-w-3xl mx-auto">
+                     <h2 class="text-3xl font-bold text-gray-800">The Worlds They Inhabit</h2>
+                     <p class="mt-2 text-gray-600">The setting and societal structure of each novel are fundamental to the protagonist's journey. One is a world of chaotic inequality and vibrant individualism, while the other is a world of absolute control and emotionless stability.</p>
+                </div>
+                <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white p-8 rounded-xl shadow-lg border-2 border-[#D9534F]/50">
+                        <h3 class="text-2xl font-bold text-[#D9534F] mb-4">A World of Scarcity & Wonder</h3>
+                        <p class="mb-4"><strong class="font-semibold text-gray-700">Setting:</strong> A poor, cramped home overshadowed by a magical, mysterious chocolate factory.</p>
+                        <p><strong class="font-semibold text-gray-700">Society:</strong> A capitalistic, free-market world with a stark divide between the rich and poor. Individuality, for better or worse, is on full display.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-lg border-2 border-[#5BC0DE]/50">
+                        <h3 class="text-2xl font-bold text-[#5BC0DE] mb-4">A World of Sameness & Control</h3>
+                        <p class="mb-4"><strong class="font-semibold text-gray-700">Setting:</strong> A sterile, seemingly perfect dystopian Community where every aspect of life is regulated.</p>
+                        <p><strong class="font-semibold text-gray-700">Society:</strong> A controlled, utopian society that has eliminated choice, emotion, and individuality to ensure stability and predictability.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="themes">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-3xl font-bold text-gray-800">Thematic Focus</h2>
+                    <p class="mt-2 text-gray-600">This radar chart visualizes the core messages of each book. Notice how *Charlie* focuses on personal virtues and family, while *The Giver* explores complex societal concepts like memory and humanity, creating distinct thematic "shapes" for each novel.</p>
+                </div>
+                <div class="mt-10 bg-white p-4 md:p-8 rounded-xl shadow-lg border border-gray-200">
+                    <div class="chart-container">
+                        <canvas id="themesChart"></canvas>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="tone">
+                 <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-3xl font-bold text-gray-800">Narrative Tone</h2>
+                    <p class="mt-2 text-gray-600">The narrative tone shapes the reader's experience. This chart places each book on a qualitative spectrum, highlighting the stark contrast between Dahl's dark, whimsical humor and Lowry's contemplative, serious tone.</p>
+                </div>
+                <div class="mt-10 bg-white p-4 md:p-8 rounded-xl shadow-lg border border-gray-200">
+                    <div class="chart-container" style="height: 250px;">
+                        <canvas id="toneChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <section id="narrative">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-3xl font-bold text-gray-800">The Path to Resolution</h2>
+                    <p class="mt-2 text-gray-600">Each protagonist's journey culminates in a life-altering climax and leads to a vastly different resolution. Below, we trace the narrative arc from the core conflict to the final outcome for both Charlie and Jonas.</p>
+                </div>
+                <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-4 text-center">
+                        <h3 class="text-2xl font-bold text-[#D9534F]">Charlie's Journey</h3>
+                        <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+                            <h4 class="font-bold text-gray-700">Main Conflict</h4>
+                            <p class="text-gray-600">Struggles with poverty and desires to win the Golden Ticket, facing the greed of others.</p>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+                            <h4 class="font-bold text-gray-700">Climax</h4>
+                            <p class="text-gray-600">Passes a final moral test by returning the Everlasting Gobstopper to Wonka.</p>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+                            <h4 class="font-bold text-gray-700">Resolution</h4>
+                            <p class="text-gray-600">Inherits the factory, securing a magical, happy future for his family.</p>
+                        </div>
+                    </div>
+                    <div class="space-y-4 text-center">
+                        <h3 class="text-2xl font-bold text-[#5BC0DE]">Jonas's Journey</h3>
+                        <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+                            <h4 class="font-bold text-gray-700">Main Conflict</h4>
+                            <p class="text-gray-600">Grows aware of his society's flaws through receiving memories, creating internal turmoil.</p>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+                            <h4 class="font-bold text-gray-700">Climax</h4>
+                            <p class="text-gray-600">Executes a plan to escape the Community and release the memories back to the people.</p>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+                            <h4 class="font-bold text-gray-700">Resolution</h4>
+                            <p class="text-gray-600">Arrives "Elsewhere," leaving his and Gabriel's future ambiguous and uncertain.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="text-center mt-16 md:mt-24 py-8 border-t border-gray-200">
+            <p class="text-gray-500">SPA Infographic by an Expert Frontend Developer.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tooltipTitleCallback = (tooltipItems) => {
+                const item = tooltipItems[0];
+                let label = item.chart.data.labels[item.dataIndex];
+                if (Array.isArray(label)) {
+                    return label.join(' ');
+                } else {
+                    return label;
+                }
+            };
+            
+            const commonTooltipOptions = {
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            title: tooltipTitleCallback
+                        },
+                        backgroundColor: '#ffffff',
+                        titleColor: '#333333',
+                        bodyColor: '#555555',
+                        titleFont: { size: 14, weight: 'bold' },
+                        bodyFont: { size: 12 },
+                        padding: 10,
+                        cornerRadius: 6,
+                        borderColor: 'rgba(0, 0, 0, 0.1)',
+                        borderWidth: 1,
+                    }
+                }
+            };
+
+            const themesCtx = document.getElementById('themesChart').getContext('2d');
+            new Chart(themesCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Greed & Consequences', 'Kindness & Humility', 'Importance of Family', 'Value of Memory', 'Emotion & Individuality', 'Humanity vs. Perfection'],
+                    datasets: [{
+                        label: 'Charlie & The Chocolate Factory',
+                        data: [5, 4, 5, 1, 2, 1],
+                        backgroundColor: 'rgba(217, 83, 79, 0.2)',
+                        borderColor: '#D9534F',
+                        pointBackgroundColor: '#D9534F',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#D9534F'
+                    }, {
+                        label: 'The Giver',
+                        data: [1, 2, 2, 5, 5, 4],
+                        backgroundColor: 'rgba(91, 192, 222, 0.2)',
+                        borderColor: '#5BC0DE',
+                        pointBackgroundColor: '#5BC0DE',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#5BC0DE'
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    ...commonTooltipOptions,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
+                            grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                            pointLabels: {
+                                font: { size: 12 },
+                                color: '#555'
+                            },
+                            ticks: {
+                                backdropColor: 'rgba(255, 255, 255, 0.75)',
+                                stepSize: 1
+                            }
+                        }
+                    },
+                    plugins: {
+                       ...commonTooltipOptions.plugins,
+                       legend: {
+                           position: 'top',
+                           labels: { color: '#333' }
+                       }
+                    }
+                }
+            });
+
+            const toneCtx = document.getElementById('toneChart').getContext('2d');
+            new Chart(toneCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Qualitative Tone'],
+                    datasets: [{
+                        label: 'Charlie (Whimsical & Dark Humor)',
+                        data: [8],
+                        backgroundColor: '#D9534F',
+                        borderColor: '#D9534F',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                    }, {
+                        label: 'The Giver (Serious & Somber)',
+                        data: [-8],
+                        backgroundColor: '#5BC0DE',
+                        borderColor: '#5BC0DE',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    indexAxis: 'y',
+                    ...commonTooltipOptions,
+                    scales: {
+                        x: {
+                            stacked: true,
+                            min: -10,
+                            max: 10,
+                            grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                            ticks: {
+                                color: '#555',
+                                callback: function(value) {
+                                    if (value === -10) return 'Serious';
+                                    if (value === 0) return 'Neutral';
+                                    if (value === 10) return 'Whimsical';
+                                    return '';
+                                }
+                            }
+                        },
+                        y: {
+                            stacked: true,
+                            grid: { display: false },
+                            ticks: { display: false }
+                        }
+                    },
+                    plugins: {
+                        ...commonTooltipOptions.plugins,
+                        legend: {
+                            position: 'top',
+                            labels: { color: '#333' }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
